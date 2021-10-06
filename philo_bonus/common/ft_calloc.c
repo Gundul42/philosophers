@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/21 16:18:58 by graja             #+#    #+#             */
-/*   Updated: 2021/10/02 09:33:56 by graja            ###   ########.fr       */
+/*   Created: 2021/05/12 16:27:34 by graja             #+#    #+#             */
+/*   Updated: 2021/09/21 15:06:47 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/philo.h"
 
-long	get_time_milli(void)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	long			ret;
-	struct timeval	tv;
+	void	*ptr;
 
-	usleep(20);
-	if (gettimeofday(&tv, NULL) < 0)
-		return (-1);
-	ret = (long)(tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	return (ret);
+	ptr = malloc(size * nmemb);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, size * nmemb);
+	return (ptr);
 }

@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/21 16:18:58 by graja             #+#    #+#             */
-/*   Updated: 2021/10/02 09:33:56 by graja            ###   ########.fr       */
+/*   Created: 2021/10/02 12:24:11 by graja             #+#    #+#             */
+/*   Updated: 2021/10/02 12:38:44 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/philo.h"
 
-long	get_time_milli(void)
+void	cleanup(t_philo *data)
 {
-	long			ret;
-	struct timeval	tv;
+	int	i;
 
-	usleep(20);
-	if (gettimeofday(&tv, NULL) < 0)
-		return (-1);
-	ret = (long)(tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	return (ret);
+	i = 0;
+	pthread_mutex_destroy(data[i].death);
+	pthread_mutex_destroy(data[i].access);
+	if (data->death)
+		free(data[i].death);
+	if (data->access)
+		free(data[i].access);
+	if (data->rip)
+		free(data[i].rip);
+	while (i < data->ttl)
+	{
+		pthread_mutex_destroy(&data[i].fork);
+		i++;
+	}
+	free(data);
 }

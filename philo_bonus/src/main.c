@@ -6,43 +6,53 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:36:47 by graja             #+#    #+#             */
-/*   Updated: 2021/10/02 13:09:09 by graja            ###   ########.fr       */
+/*   Updated: 2021/10/06 10:19:44 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/philo.h"
 
-int	letsgo(t_philo *data)
+static
+void	wait_for_end(t_philo *data, int *lst, int status, int i)
 {
-	int		i;
-	long	tme;
-
-	i = 0;
-	tme = get_time_milli();
-	while (i < data[i].ttl)
+	while (!status && i > 0)
 	{
-		data[i].timestamp = tme;
-		data[i].lstmeal = data[i].timestamp;
-		if (pthread_create(&data[i].id, NULL, run_philos, &data[i]))
-			return (1);
-		usleep(20);
-		i++;
-	}
-	while (i > 0)
-	{
-		pthread_join(data[i - 1].id, NULL);
+		waitpid(-1, &status, 0);
 		i--;
 	}
-	return (0);
+	if (status == 65280)
+		killemall(data, lst);
+	free(lst);
 }
 
 static
-int	error_print(char *s, t_philo *data)
+int	letsgo(t_philo *data, int n)
 {
-	printf(">>> Error in %s <<<\n\n", s);
-	if (data)
-		cleanup(data);
-	return (1);
+	pid_t	*lst;
+	int		i;
+	int		status;
+
+	status = 0;
+	lst = malloc(sizeof(pid_t) * n);
+	i = 0;
+	while (i < n)
+	{
+		data->nbr = i + 1;
+		data->timestamp = get_time_milli();
+		data->lstmeal = data->timestamp;
+		lst[i] = fork();
+		usleep(20);
+		if (!lst[i])
+		{
+			if (!run_philos(data))
+				exit (0);
+			else
+				exit (-1);
+		}
+		i++;
+	}
+	wait_for_end(data, lst, status, i);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -55,14 +65,16 @@ int	main(int argc, char **argv)
 	if (!check_cmdline(argc, argv))
 		err = error_print("parameters", data);
 	if (!err)
-		data = calloc(ft_atoi(argv[1]), sizeof(t_philo));
+		data = calloc(1, sizeof(t_philo));
 	if (!err && !data)
 		err = error_print("memory allocation", data);
 	if (!err && init_philo(argc, argv, data))
-		err = error_print("mutex creation", data);
-	if (!err && letsgo(data))
+		err = error_print("semaphore creation", data);
+	if (!err && letsgo(data, ft_atoi(argv[1])))
 		err = error_print("memory allocation", data);
 	if (data)
 		cleanup(data);
+	if (err)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

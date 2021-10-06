@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/21 16:18:58 by graja             #+#    #+#             */
-/*   Updated: 2021/10/02 09:33:56 by graja            ###   ########.fr       */
+/*   Created: 2021/05/12 13:11:59 by graja             #+#    #+#             */
+/*   Updated: 2021/09/21 15:08:15 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/philo.h"
 
-long	get_time_milli(void)
+void	ft_bzero(void *s, size_t n)
 {
-	long			ret;
-	struct timeval	tv;
+	unsigned int	i;
+	char			*ptr;
 
-	usleep(20);
-	if (gettimeofday(&tv, NULL) < 0)
-		return (-1);
-	ret = (long)(tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	return (ret);
+	i = 0;
+	ptr = (char *)s;
+	while (i < n)
+	{
+		ptr[i] = '\0';
+		i++;
+	}
 }
