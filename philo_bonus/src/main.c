@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:36:47 by graja             #+#    #+#             */
-/*   Updated: 2021/10/06 16:21:31 by graja            ###   ########.fr       */
+/*   Updated: 2021/10/07 18:59:20 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	wait_for_end(t_philo *data, int *lst, int status, int i)
 		waitpid(-1, &status, 0);
 		i--;
 	}
-	if (status == 65280)
+	if (status)
 		killemall(data, lst);
 	free(lst);
 }
