@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 09:22:11 by graja             #+#    #+#             */
-/*   Updated: 2021/10/06 11:53:54 by graja            ###   ########.fr       */
+/*   Updated: 2021/10/06 15:50:06 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	run_philos(t_philo *data)
 		{
 			sem_wait(data->access);
 			printf("%010ld", get_time_milli() - data->timestamp);
-			printf("\033[0;33m%3d had all meals\x1b[0m\n", data->nbr);
+			printf(" \033[0;33m%3d had all meals\x1b[0m\n", data->nbr);
 			sem_post(data->access);
 		}
 		usleep(20);

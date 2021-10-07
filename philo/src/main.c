@@ -6,7 +6,7 @@
 /*   By: graja <graja@student.42wolfsburg.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:36:47 by graja             #+#    #+#             */
-/*   Updated: 2021/10/02 13:09:09 by graja            ###   ########.fr       */
+/*   Updated: 2021/10/06 16:20:43 by graja            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	main(int argc, char **argv)
 	err = 0;
 	data = NULL;
 	if (!check_cmdline(argc, argv))
-		err = error_print("parameters", data);
+		err = error_print("parameters: [1-200][>=60][>=60][>=60]{>=1}",
+				data);
 	if (!err)
 		data = calloc(ft_atoi(argv[1]), sizeof(t_philo));
 	if (!err && !data)
@@ -64,5 +65,7 @@ int	main(int argc, char **argv)
 		err = error_print("memory allocation", data);
 	if (data)
 		cleanup(data);
+	if (err)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
